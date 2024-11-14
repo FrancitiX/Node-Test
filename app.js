@@ -59,7 +59,7 @@ app.listen(PORT, () => {
 });
 
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "login.html"));
+  res.sendFile(path.join(__dirname, "tu-proyecto/public", "login.html"));
 });
 
 //Controladores de solicitudes

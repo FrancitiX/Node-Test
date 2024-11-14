@@ -1,0 +1,20 @@
+on: push
+jobs:
+  build-node:
+    runs-on: ubuntu-latest
+    container: node:21.7.1  # Usando el contenedor de Node.js
+    steps: 
+      - run: rm -rf node_modules package-lock.json
+      - run: npm cache clean --force
+      - name: Check Node.js version
+        run: node --version  # Verifica que Node.js está instalado
+      - name: Check npm version
+        run: npm --version  # Verifica que npm está instalado
+      - uses: actions/checkout@v3  # Revisa el código fuente del repositorio
+      - run: chmod -R 777 .
+      - name: Install dependencies
+        run: npm install --unsafe-perm  # Instala todas las dependencias
+      - name: Install specific packages
+        run: npm install express mongodb mongoose bcrypt@5.0.1 body-parser path cors multer fs  # Instala dependencias adicionales
+      - name: Run app.js
+        run: node app.js  # Ejecuta la aplicación

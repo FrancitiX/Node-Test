@@ -16,5 +16,5 @@ jobs:
         run: npm install --unsafe-perm  # Instala todas las dependencias
       - name: Install specific packages
         run: npm install express mongodb mongoose bcrypt@5.0.1 body-parser path cors multer fs  # Instala dependencias adicionales
-      # - name: Run app.js
-      #   run: node app.js  # Ejecuta la aplicación
+      - name: Run app.js
+        run: node app.js  # Ejecuta la aplicación

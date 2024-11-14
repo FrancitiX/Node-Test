@@ -1,4 +1,4 @@
-const serverUrl = "http://localhost:5001";
+const serverUrl = "https://francitix.github.io/Node-Test/";
 
 const User = document.getElementById("usuario");
 const Email = document.getElementById("correo");

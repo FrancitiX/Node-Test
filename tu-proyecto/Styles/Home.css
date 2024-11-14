@@ -1,0 +1,56 @@
+@import 'General.css';
+
+.homeStart {
+  position: relative;
+  height: 80vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(1px);
+  border: 2px solid rgb(250, 250, 250, 0.2);
+  box-shadow: 0 0 10px rgb(10, 10, 10, 0.1);
+}
+
+.datosUsuario {
+  width: 50%;
+  padding-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
+  align-items: start;
+}
+
+.title_user {
+  margin-bottom: 0px;
+}
+
+.title_user h1 {
+  font-size: 50px;
+}
+
+.imageStart {
+  width: 40%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 20%;
+  overflow: hidden;
+}
+
+.imageStart img {
+  width: 100%;
+  filter: drop-shadow(0 0 10px rgba(10, 10, 10, 0.3));
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+}
+
+.imageStart .editar {
+  position: absolute;
+  top: 20px;
+  right: 0px;
+  width: 50px;
+  font-size: 30px;
+  z-index: 2;
+}

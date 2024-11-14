@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+
+    <link rel="stylesheet" href="../Styles/Update.css">
+    <link rel="stylesheet" href="../Styles/General.css">
+    <script src="https://kit.fontawesome.com/a980ce6fd0.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <header>
+        <nav class="horizontal nav">
+
+            <a href="Home.html">
+                <h1 class="title_nav">
+                    Hasheo de contraseñas
+                </h1>
+            </a>
+            <div class="horizontal nav-options">
+                <div>
+                    <a class="nav_option" href="#usuarios_area">Usuarios</a>
+                </div>
+                <div>
+                    <a class="nav_option" href="#cambios_area">Cambios</a>
+                </div>
+                <div>
+                    <a id="salir" class="nav_exit" href="#">Sallr</a>
+                </div>
+                <div class="theme-selector-container">
+                    <div class="nav_option oculto" id="Dark"><i class="fa-solid fa-moon"></i></div>
+                    <div class="nav_option" id="Light"><i class="fa-solid fa-sun"></i></div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="alerta oculto">
+        <h1>Problema detectado en la base de datos!</h1>
+        <h4>Los datos de la base de datos no coinciden con el ultimo registro en la misma</h4>
+    </div>
+
+    <main>
+        <div id="bg" class="container2">
+            <div class="">
+                <div class="title_user">
+                    <div class="horizontal">
+                        <div href="Home.html" id="regresar" class="back">
+                            <a href="Home.html"><i class="fa-solid fa-arrow-left-long"></i></a>
+                        </div>
+                        <h1 id="usuarioEdit">Editar usuario</h1>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="form">
+                <form id="updateForm">
+                    <div class="form-group">
+                        <div class="imagecontainer">
+                            <img id="imagen" src="Media/user.png" alt="user-Image" onerror="this.src=Media/user.png">
+                        </div>
+                        <input type="file" class="oculto input" id="imageInput" accept="image/*" />
+                    </div>
+                    <div class="form-group">
+                        <label for="username">Nombre de Usuario</label>
+                        <input type="text" id="username" name="username" value="" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Correo electronico</label>
+                        <input type="email" class="input" id="email" name="email" value="" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Contraseña actual</label>
+                        <div class="inputPass">
+                            <input type="password" id="password" name="password" placeholder="Contraseña">
+                            <div class="eyes">
+                                <span class="noWatch disponibilidad oculto">Ocultar</span>
+                                <span class="watch disponibilidad">Mostrar</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Nueva contraseña</label>
+                        <div class="inputPass">
+                            <input type="password" class="input" id="newPassword" name="newPassword" placeholder="Nueva contraseña">
+                            <div class="eyes">
+                                <span class="noWatch disponibilidad oculto">Ocultar</span>
+                                <span class="watch disponibilidad">Mostrar</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Repetir contraseña</label>
+                        <div class="inputPass">
+                            <input type="password" id="repeatPassword" name="repeatPassword"
+                                placeholder="Nueva contraseña">
+                            <div class="eyes">
+                                <span class="noWatch disponibilidad oculto">Ocultar</span>
+                                <span class="watch disponibilidad">Mostrar</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group doble_grid">
+                        <label for="description">Descripción del cambio </label>
+                        <input type="text" id="description" name="description" placeholder="descriptcion">
+                    </div>
+
+                    <div class="doble_grid">
+                        <div class="horizontal save">
+                            <button id="cancelar" type="button">Cancelar</button>
+                            <button class="disabled" id="guardar" type="submit">Guardar</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+
+    </main>
+
+    <div id="modalContainer" class="modal oculto">
+        <div class="modal-content">
+            <h1>Seguro que desea eliminar el usuario <span id="userDelete"></span>?</h1>
+            <div class="modal-buttons">
+                <button id="cancelButton">Cancelar</button>
+                <button id="deleteButton">Eliminar</button>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <h4 class="text" style="font-size: 15px;">SmartOrder &copy;2024</h4>
+    </footer>
+
+    <script src="./../js/actualizar.js"></script>
+    <script src="./../js/general.js"></script>
+</body>
+
+</html>

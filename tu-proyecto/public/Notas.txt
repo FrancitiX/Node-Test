@@ -1,0 +1,629 @@
+document.getElementById('resultado_busqueda').innerHTML = "Cargando..."
+
+    const xhr = new XMLHttpRequest();
+
+        //xhr.open('GET', `/wp-json/custom/v1/procesar?${params}`, true);
+        xhr.open('GET', `https://daltonplus.mx/daltonarrendadora/wp-json/custom/v1/procesar?${params}`, true);
+        
+
+
+        document.getElementById('loading-overlay').style.display = 'none';
+
+        xhr.onreadystatechange = function() {
+            
+            
+             
+            if (xhr.readyState === 4) {
+                requestInProgress = false;
+                
+                
+
+                if (xhr.status === 200) {
+                    const response = JSON.parse(xhr.responseText);
+                    
+                    let results = response.results || [];
+                    const consulta = response.consulta;
+                    let vardata = response.vardata;
+                    let years = response.years;
+                    document.getElementById('resultado_busqueda').innerHTML = ''; 
+                    // console.log('Resultados: ' + JSON.stringify(results, null, 2));
+                    
+                    // console.log('años encontrados: ' + years); 'Consulta: ' + consulta
+                    console.log("Vardata regresada: " + vardata);
+                    
+                    if (!results) {results.push(0)}
+                    
+                    ResultsText.textContent = results.length === 1 ? results.length + ' Resultado' : results.length + ' Resultados';
+
+                    const yearContainer = document.getElementById('years-actives');
+
+                    if (yearContainer) {
+                            
+                        yearContainer.innerHTML = '';
+                        
+                        if (!years || years.length === 0) {
+                            years = [new Date().getFullYear()-1, new Date().getFullYear(), new Date().getFullYear()+1];
+                        }
+                        years.forEach(function(year) {
+                            const button = document.createElement('button');
+                            button.type = 'button';
+                            button.classList.add('year-button');
+                            button.textContent = year;
+                            if (dataFiltered.includes(year)) {
+                                button.classList.add('selected');
+                            }
+                            
+                            button.addEventListener('click', function() {
+                                if (!dataFiltered.includes(year)) {
+                                    dataFiltered.push(year)
+                                    addFilterTag(`${year}`, 'year');
+                                    button.classList.add('selected');
+                                } 
+                            });
+                        
+                            yearContainer.appendChild(button);
+                        });
+                    } else {
+                        console.error("El contenedor con id 'years-actives' no se encontró.");
+                    }
+
+                    if (results.length === 0) {
+                        
+                        document.getElementById('resultado_busqueda').innerHTML = '<div class="no_resultados"><p class="no_disponible"> No se encontraron modelos.</p></div>';
+                    } else {
+                        results.reverse().forEach(result => {
+                            // console.log("resultados: " + result.marca);
+                            
+                            
+                            
+                            let tipoVehiculo = (result.tipo_vehiculo === 'Híbridos / Eléctricos') ? `
+                                <img style="flex-grow: 0;" class="etiquetas electrico" src="${urlSitio}/wp-content/uploads/2024/icons/tag_hybrid_cars.png">` : '';
+                            
+                            // Si no es un vehículo híbrido/eléctrico, entonces evaluamos el deducible
+                            if (tipoVehiculo === '') {
+                                tipoVehiculo = (result.tipo_vehiculo === 'Eléctricos') ? `
+                                <img style="flex-grow: 0;" class="etiquetas electrico" src="${urlSitio}/wp-content/uploads/2024/icons/tag_electric_cars.png">` : '';;
+                            }
+                            
+                            /*if (tipoVehiculo === '') {
+                                tipoVehiculo = (result.deducible === true) ? `
+                                <img style="flex-grow: 0;" class="etiquetas deducible" src="${urlSitio}/wp-content/uploads/2024/07/Frame-2608884.png">` :
+                                '<div style="flex-grow: 0;width: 115px;"></div>';
+                            }*/
+                            
+                            
+                            let vehiculoDeducible = '';
+                            let btnShare = '';
+                            
+                            if(result.deducible === true) {
+                                if(tipoVehiculo === ''){
+                                    
+                                   vehiculoDeducible =`<img style="flex-grow: 0;margin-right:120px;" class="etiquetas deducible" src="${urlSitio}/wp-content/uploads/2024/07/Frame-2608884.png">`
+                                   btnShare = `
+                                            <a target="_blank" style="margin-left: 50px;" href="https://api.whatsapp.com/send/?phone=5213350006710&amp;text=Hola%2C+Deseo+m%C3%A1s+informaci%C3%B3n+del+sitio+web&amp;type=phone_number&amp;app_absent=0">
+                                                <i style="width:16px !important;" aria-hidden="true" class="hm hm-share"></i>
+                                            </a>
+                                   `;
+                                    
+                                } else {
+                                    
+                                   if (result.tipo_vehiculo === 'Híbridos / Eléctricos') {
+                                      
+                                      vehiculoDeducible =`<img style="flex-grow: 0;" class="etiquetas deducible" src="${urlSitio}/wp-content/uploads/2024/07/Frame-2608884.png">`
+                                      btnShare = `
+                                            <a target="_blank" style="margin-left: 70px;" href="https://api.whatsapp.com/send/?phone=5213350006710&amp;text=Hola%2C+Deseo+m%C3%A1s+informaci%C3%B3n+del+sitio+web&amp;type=phone_number&amp;app_absent=0">
+                                                <i style="width:16px !important;" aria-hidden="true" class="hm hm-share"></i>
+                                            </a>
+                                   `;
+                                   } else {
+                                      vehiculoDeducible =`<img style="flex-grow: 0;" class="etiquetas deducible" src="${urlSitio}/wp-content/uploads/2024/07/Frame-2608884.png">`
+                                      btnShare = `
+                                            <a target="_blank" style="margin-left: 40px;" href="https://api.whatsapp.com/send/?phone=5213350006710&amp;text=Hola%2C+Deseo+m%C3%A1s+informaci%C3%B3n+del+sitio+web&amp;type=phone_number&amp;app_absent=0">
+                                                <i style="width:16px !important;" aria-hidden="true" class="hm hm-share"></i>
+                                            </a>
+                                   `;
+
+                                   }
+
+                                }
+                                
+                            } else {
+                                if(tipoVehiculo === ''){
+                                    
+                                   vehiculoDeducible =`<div style="flex-grow: 0;width: 115px;"></div>`;
+                                   btnShare = `
+                                        <a target="_blank" style="margin-left: 70px;" href="https://api.whatsapp.com/send/?phone=5213350006710&amp;text=Hola%2C+Deseo+m%C3%A1s+informaci%C3%B3n+del+sitio+web&amp;type=phone_number&amp;app_absent=0">
+                                            <i style="width:16px !important;" aria-hidden="true" class="hm hm-share"></i>
+                                        </a>`;
+                                } else {
+                                    
+                                   vehiculoDeducible =`<div style="flex-grow: 0;width: 115px;"></div>`;
+                                   btnShare = `
+                                        <a target="_blank" style="margin-left: 70px;" href="https://api.whatsapp.com/send/?phone=5213350006710&amp;text=Hola%2C+Deseo+m%C3%A1s+informaci%C3%B3n+del+sitio+web&amp;type=phone_number&amp;app_absent=0">
+                                            <i style="width:16px !important;" aria-hidden="true" class="hm hm-share"></i>
+                                        </a>`;
+                                    
+                                    
+                                    
+                                }
+                                
+                            }
+                            
+                           //let urlVerModelo = result.permalink.replace('daltonplus.mx/daltonarrendadora', 'arrendadora-qa.koud.cloud');
+
+                            
+                            /*if (tipoVehiculo == `
+                                <img style="flex-grow: 0;" class="etiquetas electrico" src="${urlSitio}/wp-content/uploads/2024/07/Frame-1217.png">`) {
+                                vehiculoDeducible = (result.deducible === true) ? `
+                                <img style="flex-grow: 0;" class="etiquetas deducible" src="${urlSitio}/wp-content/uploads/2024/07/Frame-2608884.png">` :
+                                '<div style="flex-grow: 0;width: 115px;"></div>';
+                            }*/
+                            
+                            // let logoMarca = `<span class="logo_marca_card" style="display: flex;justify-content: end;">
+                            //                     <img class="logo_" style="position:;top:50px;right:50px;height:41;" src="${urlSitio}/wp-content/uploads/2024/Marcas/${result.marca}.png">
+                            //                 </span>`
+    
+                            const card = `
+                                <div class="card-1 cards chips_api_" >
+                                
+                                    <div class="left-section">
+                                        <div style="display: flex; margin: 0px 10px; padding-bottom: 20px;">
+                                            
+                                            ${tipoVehiculo}
+                                            
+                                            ${vehiculoDeducible}
+                                            
+                                            ${btnShare}
+                                            
+                                            
+                                            
+                                        </div>
+                                        <img class="" src="${result.imagen_url}" alt="${result.nombre_modelo}">
+                                    </div>                                
+                                    <div class="right-section">
+                                        ${result.marca === 'Toyota' ? `
+                                            <span class="logo_marca_card" style="display: flex;justify-content: end;">
+                                                <img src="${urlSitio}/wp-content/uploads/2024/07/image-154.png" style="position:;top:50px;right:50px;" class="logo_">
+                                            </span>
+                                        ` : result.marca === 'Byd' ? `
+                                            <span class="logo_marca_card" style="display: flex;justify-content:end;">
+                                                <img src="${urlSitio}/wp-content/uploads/2024/Marcas/byd.png" style="position:;top:50px;right:50px;width:43px" class="logo_">
+                                            </span>
+                                            
+                                        ` : result.marca === 'Gac' ? `
+                                            <span class="logo_marca_card" style="display: flex;justify-content:end;">
+                                                <img src="${urlSitio}/wp-content/uploads/2024/Marcas/gac.png" style="position:;top:50px;right:50px;width:43px" class="logo_">
+                                            </span>
+
+                                        ` : result.marca === 'MG' ? `
+                                            <span class="logo_marca_card" style="display: flex;justify-content:end;">
+                                                <img src="${urlSitio}/wp-content/uploads/2024/Marcas/MG.png" style="position:;top:50px;right:50px;width:43px" class="logo_">
+                                            </span>
+                                            
+                                        ` : result.marca === 'Suzuki' ? `
+                                            <span class="logo_marca_card" style="display: flex;justify-content:end;">
+                                                <img src="${urlSitio}/wp-content/uploads/2024/Marcas/Suzuki.png" style="position:;top:50px;right:50px;width:43px" class="logo_">
+                                            </span>
+
+                                        ` : result.marca === 'Jaecoo' ? `
+                                            <span class="logo_marca_card" style="display: flex;justify-content:end;">
+                                                <img src="${urlSitio}/wp-content/uploads/2024/Marcas/Jaecoo.png" style="position:;top:50px;right:50px;width:43px" class="logo_">
+                                            </span>
+
+                                        ` : result.marca === 'Hyundai' ? `
+                                            <span class="logo_marca_card" style="display: flex;justify-content:end;">
+                                                <img src="${urlSitio}/wp-content/uploads/2024/03/hyundai.svg" style="position:;top:50px;right:50px;width:43px" class="logo_">
+                                            </span>
+
+                                        ` : result.marca === 'Kia' ? `
+                                            <span class="logo_marca_card" style="display: flex;justify-content:end;">
+                                                <img src="${urlSitio}/wp-content/uploads/2024/Marcas/kia.png" style="position:;top:50px;right:50px;width:43px" class="logo_">
+                                            </span>
+                                            
+                                        ` : result.marca === 'Volvo' ? `
+                                            <span class="logo_marca_card" style="display: flex;justify-content:end;">
+                                                <img src="${urlSitio}/wp-content/uploads/2024/Marcas/Volvo.png" style="position:;top:50px;right:50px;width:43px" class="logo_">
+                                            </span>
+                                            
+
+                                        ` : result.marca === 'Honda' ? `
+                                            <span class="logo_marca_card" style="display: flex;justify-content:end;">
+                                                <img src="${urlSitio}/wp-content/uploads/2024/Marcas/honda.png" style="position:;top:50px;right:50px;width:43px" class="logo_">
+                                            </span>
+                                            
+                                        ` : result.marca === 'Omoda' ? `
+                                            <span class="logo_marca_card" style="display: flex;justify-content:end;">
+                                                <img src="${urlSitio}/wp-content/uploads/2024/07/omoda-1.png" style="position:;top:50px;right:50px;width:48px" class="logo_">
+                                            </span>
+                                            
+                                        ` : result.marca === 'Chirey' ? `
+                                            <span class="logo_marca_card" style="display: flex;justify-content:end;">
+                                                <img src="${urlSitio}/wp-content/uploads/2024/07/image-154-2.png" style="position:;top:50px;right:50px;" class="logo_">
+                                            </span>
+                                        ` : `
+                                            <span class="logo_marca_card" style="display: flex;justify-content:end;visibility:hidden;">
+                                                <img src="${urlSitio}/wp-content/uploads/2024/07/image-154-2.png" style="position:;top:50px;right:50px;" class="logo_">
+                                            </span>
+                                        `}
+                                    
+                                    
+                                        <div class="model-name model_card card-horizontal">
+                                            <h2>${result.nombre_modelo}</h2>
+                                            <p style="color:#6c6c6c;width:auto;font-size:14px;font-family:roboto;">${result.titulo}</p>
+                                        </div>
+                                        <div class="specs text_card">
+                                            <div class="spec card_pay">
+                                                <p class="textCard2 textDisabled text_Card2" >Pago mes desde<br></p>
+                                                <p style="font-size:23px;font-family:roboto;color:#0b62bd;font-weight:700;">$0 MXN<span class="mes_Card1 textCard1">/mes</span></p>
+                                            </div>
+                                            <div class="spec card_pay">
+                                                <p class="textCard2 textDisabled text_Card2">Precio contado<br></p>
+                                                <p class="textCard2 textDisabled" style="font-size:23px;font-family:roboto;font-weight:400;color:#2e2929;" class="precio_ reveal-text ">$${result.precio} MXN</p>
+                                                
+                                                <p class="textCard1 contado_Card1">$${result.precio} MXN de contado</p>
+                                            </div>
+                                      
+                                      
+                                      
+                                      
+                                            <div class="spec locación_card">
+                                                <p class="locacion_card text_Card2">Ubicación<br></p>
+                                                <p class="locacion_card" style="font-size:23px;font-family:roboto;font-weight:400;color:#2e2929;">${result.ubicacion === 'Guadalajara' ? 'Guadalajara, Jal.' : result.ubicacion}</p>
+                                            </div>
+                                        </div>
+                                        <div class="buttons buttons_card">
+                                            <a href="${result.permalink}" class="btn-primary">Ver modelo</a>
+                                            <button class="btn-secondary">Cotizar Arrendamiento</button>
+                                        </div>
+                                    </div>
+                                </div>`;
+                            document.getElementById('resultado_busqueda').insertAdjacentHTML('beforeend', card);
+                        });
+                    }
+                    document.getElementById('loading-overlay').style.display = 'none';
+                } else {
+                    console.error('error xhr: ' + xhr.status + ' ' + xhr.statusText);
+                }
+            }
+        };
+        xhr.send();
+    }
+
+
+
+    
+porque no funciona correctamente la parte del tipo? cuando selecciono solo un filtro manda el $tipo como indefinido
+
+$tipos = $request->get_param('type');
+
+    if (!is_array($tipos)) {
+            $tipos = array_filter(array($tipos)); 
+    }
+
+if (!empty($tipos)) {
+        // $vehiculos = array('relation' => 'AND');
+        
+        $vehiculos[] = array(
+             'key' => 'tipo',
+             'value' => $tipos,
+             'compare' => 'IN'
+        );
+        
+        $vehiculos[] = array(
+             'key' => 'tipo_vehiculo',
+             'value' => $tipos,
+             'compare' => 'IN'
+         );
+        
+        $meta_query[] = $vehiculos;
+    }
+
+todo el codigo:
+
+<?
+function custom_procesar_callback(WP_REST_Request $request) {
+    $deducibles = $request->get_param('deducible');
+    $marcas = $request->get_param('marca');
+    $modelos_titulo = $request->get_param('model');
+    $modelos_test = $request->get_param('model');
+    $min_price = $request->get_param('minprice');
+    $max_price = $request->get_param('maxprice');
+    $years = $request->get_param('years');
+    $locaciones = $request->get_param('location');
+    $tipos = $request->get_param('type');
+    $uso = $request->get_param('typeUse');
+    $search = $request->get_param('search');
+    
+    $Order = $request->get_param('orderby');
+    $years_active = [];
+ 
+    if ($deducibles) { $deducibles = true; }
+ 
+    if (!is_array($marcas)) {
+        $marcas = array_filter(array($marcas)); 
+    }
+    if (!is_array($modelos_titulo)) {
+        $modelos_titulo = array_filter(array($modelos_titulo)); 
+    }
+
+
+    $modelo_ids = array();
+    if (!empty($modelos_titulo)) {
+        foreach ($modelos_titulo as $modelo_titulo) {
+            $modelo_post = get_page_by_title($modelo_titulo, OBJECT, 'modelo');
+            if ($modelo_post) {
+                
+                
+                $modelo_ids[] = $modelo_post->ID;
+            }
+        }
+    }
+
+    if (!is_array($years)) {
+        $years = array_filter(array($years)); 
+    }
+
+    if (!is_array($locaciones)) {
+            $locaciones = array_filter(array($locaciones)); 
+    }
+
+    if (!is_array($tipos)) {
+            $tipos = array_filter(array($tipos)); 
+    }
+
+
+    $meta_query = array('relation' => 'AND');
+
+    
+    if (!empty($deducibles)) {
+        $meta_query[] = array(
+            'key' => 'deducible',
+            'value' => $deducibles,
+            'compare' => 'IN'
+        );
+    }
+    
+    if (!empty($uso)) {
+        $meta_query[] = array(
+            'key' => 'tipo_vehiculo',
+            'value' => $uso,
+            'compare' => 'LIKE'
+        );
+    }
+
+    if (!empty($marcas)) {
+        $meta_query[] = array(
+            'key' => 'marca',
+            'value' => $marcas,
+            'compare' => 'IN'
+        );
+    }
+
+    if (!empty($modelo_ids)) {
+        foreach ($modelo_ids as $modelo_id) {
+            $meta_query[] = array(
+                'key' => 'modelo',
+                'value' => '"' . $modelo_id . '"',
+                'compare' => 'LIKE'
+            );
+        }
+    }
+    
+    if (!empty($min_price)) {
+        $meta_query[] = array(
+            'key' => 'precio',
+            'value' => $min_price,
+            'type' => 'NUMERIC',
+            'compare' => '>='
+        );
+    }
+    if (!empty($max_price)) {
+        $meta_query[] = array(
+            'key' => 'precio',
+            'value' => $max_price,
+            'type' => 'NUMERIC',
+            'compare' => '<='
+        );
+    }
+    
+    if (!empty($years)) {
+        $meta_query[] = array(
+            'key' => 'ano',
+            'value' => $years,
+            'compare' => 'IN'
+        );
+    }
+    
+    if (!empty($locaciones)) {
+        $meta_query[] = array(
+            'key' => 'ubicacion',
+            'value' => $locaciones,
+            'compare' => 'IN'
+        );
+    }
+
+    if (!empty($tipos)) {
+        $vehiculos = array('relation' => 'AND');
+        
+        $vehiculos[] = array(
+            'key' => 'tipo',
+            'value' => $tipos,
+            'compare' => 'IN'
+        );
+        
+        $vehiculos[] = array(
+            'key' => 'tipo_vehiculo',
+            'value' => $tipos,
+            'compare' => 'IN'
+        );
+        
+        $meta_query[] = $vehiculos;
+    }
+    
+    if (!empty($search)) {
+        // Primero, busca los IDs de los modelos que contienen la cadena $search
+        
+        $model_query = new WP_Query(array(
+            'post_type' => 'modelo',
+            'meta_query' => array(
+                array(
+                    'key' => 'nombre_modelo',
+                    'value' => $search ,
+                    'compare' => 'LIKE'
+                )
+            ),
+            'fields' => 'ids' // Solo devuelve los IDs de los modelos
+        ));
+        
+        if ($model_query->have_posts()) {
+            
+            $m_ids = $model_query->posts;
+
+            $model_meta_query = array('relation' => 'OR');
+            
+            foreach ($m_ids as $id) {
+                $model_meta_query[] = array(
+                    'key' => 'modelo',
+                    'value' => '"' . $id . '"',
+                    'compare' => 'LIKE'
+                );
+            }
+    
+            // Añadir la meta_query de modelos a la meta_query principal
+            $meta_query[] = $model_meta_query;            
+        
+            
+            
+        }     
+        
+
+    }
+    
+    
+    global $wpdb;
+    $years_query = "
+        SELECT DISTINCT meta_value AS year
+        FROM {$wpdb->postmeta}
+        WHERE meta_key = 'ano'
+        AND meta_value != ''
+        AND meta_value IS NOT NULL
+        AND meta_value REGEXP '^[0-9]{4}$'
+        ORDER BY meta_value ASC
+    ";
+    $years_active = $wpdb->get_col($years_query);
+
+
+    $orderby = 'meta_value_num'; 
+    $order = 'ASC';
+    $meta_key = '';
+
+    switch ($Order) {
+        case 'precio-desc':
+            $orderby = 'meta_value_num';
+            $order = 'ASC';
+            $meta_key = 'precio';
+            break;
+        case 'precio-asc':
+            $orderby = 'meta_value_num';
+            $order = 'DESC';
+            $meta_key = 'precio';
+            break;
+        case 'mas-viejo':
+            $orderby = 'meta_value_num';
+            $order = 'DESC';
+            $meta_key = 'ano';
+            break;
+        case 'mas-nuevo':
+            $orderby = 'meta_value_num';
+            $order = 'ASC';
+            $meta_key = 'ano';
+            break;
+        default:
+            $orderby = 'date';
+            $order = 'DESC';
+            $meta_key = '';
+            break;
+    }
+
+    $args = array(
+        'post_type' => 'version',
+        'posts_per_page' => -1,
+        'meta_query' => $meta_query,
+        'orderby' => $orderby,
+        'order' => $order
+    );
+    
+    if (!empty($meta_key)) {
+        $args['meta_key'] = $meta_key;
+    }
+
+
+
+    $query = new WP_Query($args);
+    $consulta = $query->request;
+    $results = array();
+
+    if ($query->have_posts()) {
+        while ($query->have_posts()) {
+            $query->the_post();
+            $post_id = get_the_ID();
+            $imagen_auto_id = get_post_meta($post_id, 'imagen_auto', true);
+            $imagen_auto_url = wp_get_attachment_url($imagen_auto_id);
+            $modelos = get_field('modelo');
+            $nombre_modelo = '';
+            if (is_array($modelos)) {
+                foreach ($modelos as $modelo_id) {
+                    $nombre_modelo = get_the_title($modelo_id);
+                }
+            }
+            $deductible = get_field('deducible');
+            $tipo_uso = get_field('tipo_vehiculo');
+            $precio = get_field('precio');
+            $pago_mes = get_field('pago_mes');
+            $ubicacion = get_field('ubicacion');
+            $ano = get_field('ano');
+            $results[] = array(
+                'titulo' => get_the_title(),
+                'marca' => get_post_meta($post_id, 'marca', true),
+                'nombre_modelo' => $nombre_modelo,
+                'deducible' => $deductible,
+                'tipo_vehiculo' => $tipo_uso,
+                'imagen_url' => $imagen_auto_url,
+                'precio' => $precio,
+                'pago_mes' => $pago_mes ? $pago_mes : 0,
+                'ubicacion' => $ubicacion,
+                'year' => $ano,
+                'permalink' => get_permalink()
+            );
+        }
+        wp_reset_postdata();
+
+
+        if (!empty($results) && !empty($modelos_titulo)) {
+            $last_selected_model = end($modelos_titulo);
+            foreach ($results as $key => $result) {
+                if (strpos($result['titulo'], $last_selected_model) !== false) {
+         
+         
+                    $first_result = $result;
+                    unset($results[$key]);
+                    array_unshift($results, $first_result);
+                    break;
+                }
+            }
+        }
+
+        // return rest_ensure_response($results);
+        return rest_ensure_response(array(
+        'results' => $results,
+        'years' => $years_active,
+        'vardata' => $tipos,
+        'consulta' => $consulta
+    ));
+    } else {
+        error_log("No se encontraron coincidencias.");
+        
+        
+        return rest_ensure_response(array()); 
+    }
+}

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesión</title>
+
+    <link rel="stylesheet" href="../Styles/Sesion.css">
+    <link rel="stylesheet" href="../Styles/General.css">
+
+</head>
+
+<body>
+    <header>
+        <div id="Dark"></div>
+        <div id="Light"></div>
+    </header>
+
+    <div  style="position: absolute;" class="alerta oculto">
+        <h1>Problema detectado en la base de datos!</h1>
+        <h4>Los datos de la base de datos no coinciden con el ultimo registro en la misma</h4>
+    </div>
+
+    <main>
+        
+
+        <div id="bg" class="form_container">
+            <div class="form">
+                <h1 class="title login_Title center">Iniciar Sesión</h1>
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="username">Usuario</label>
+                        <input type="text" id="username" name="username" placeholder="Usuario o correo" required>
+                    </div>
+                    <div style="margin-bottom: 0;" class="form-group">
+                        <label for="password">Contraseña</label>
+                        <div class="inputPass">
+                            <input type="password" id="password" name="password" placeholder="******" required>
+                            <div id="eyes" class="eyes">
+                                <span  id="noWatch" class="disponibilidad oculto">Ocultar</span>
+                                <span  id="watch" class="disponibilidad">Mostrar</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="horizontal rememberme">
+                        <input type="checkbox" id="recordarme" value="">
+                        <p>Recordarme</p>
+                    </div>
+                    <button type="submit">Inicar sesión</button>
+                </form>
+                <div class="changeSesion">
+                    <p>No tienes cuenta?</p>
+                    <a href="Sing.html">Registrase</a>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="container">
+            <h3 class="title">Tabla de usuarios</h3>
+            <div class="tabla">
+                <table>
+                    <thead>
+                        <tr>
+                            <th class="colum">Usuario</th>
+                            <th class="colum">Email</th>
+                        </tr>
+                    </thead>
+                    <tbody id="usersTable">
+                        <tr>
+                            <td class="campoTabla noData" colspan="2">No hay usuarios registrados</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="container3">
+                <div class="pagesContainer">
+                    <div class="horizontal paginador">
+                        <button id="anteriorUS" type="button">Anterior</button>
+                        <div id="paginasUS" class="horizontal paginas">
+                            <button >1</button>
+                        </div>
+                        <button id="siguienteUS" type="button">Siguiente</button>
+                    </div>
+                    <p id="totalPaginas">N resultados de N</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <h4 class="text" style="font-size: 15px;">SmartOrder &copy;2024</h4>
+    </footer>
+
+    <script src="./../js/general.js"></script>
+    <script src="./../js/loguear.js"></script>
+</body>
+
+</html>

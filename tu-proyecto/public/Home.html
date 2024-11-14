@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+
+    <link rel="stylesheet" href="../Styles/Home.css">
+    <link rel="stylesheet" href="../Styles/General.css">
+    <script src="https://kit.fontawesome.com/a980ce6fd0.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <header>
+        <nav class="horizontal nav">
+
+            <a href="Home.html">
+                <h1 class="title_nav">
+                    Hasheo de contraseñas
+                </h1>
+            </a>
+            <div class="horizontal nav-options">
+                <div>
+                    <a class="nav_option" href="#usuarios_area">Usuarios</a>
+                </div>
+                <div>
+                    <a class="nav_option" href="#cambios_area">Cambios</a>
+                </div>
+                <div>
+                    <a id="salir" class="nav_exit" href="#">Sallr</a>
+                </div>
+                <div class="theme-selector-container">
+                    <div class="nav_option oculto" id="Dark"><i class="fa-solid fa-moon"></i></div>
+                    <div class="nav_option" id="Light"><i class="fa-solid fa-sun"></i></div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div id="alerta" class="alerta oculto">
+        <h1>Problema detectado en la base de datos!</h1>
+        <h4>Los datos de la base de datos no coinciden con el ultimo registro en la misma</h4>
+    </div>
+
+    <main>
+        <div id="bg" class="container">
+            <div class="homeStart">
+                <div class="datosUsuario">
+                    <div class="title_user">
+                        <h1 id="usuario">Bienvenido Usuario</h1>
+                    </div>
+                    <div class="horizontal">
+                        <p class="subtitle" id="correo"></p>
+                    </div>
+                    <div class="horizontal">
+                        <p id="contrasena"></p>
+                    </div>
+                </div>
+                <div class="imageStart">
+                    <a id="edit" class="editar text" href="#"><i class="fa-solid fa-pen-to-square"></i></i></a>
+                    <img id="imageUser" src="./Media/user.png" alt="usuario">
+                </div>
+            </div>
+        </div>
+
+        <div class="containe2r">
+            <div class="container2">
+                <div id="usuarios_area" class="area">
+                    <h3>Usuarios</h3>
+                    <div class="tabla">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Nombre de Usuario</th>
+                                    <th>Email</th>
+                                    <th>Editar</th>
+                                    <th>Eliminar</th>
+                                </tr>
+                            </thead>
+                            <tbody id="usersTable">
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="container3">
+                        <div class="pagesContainer">
+                            <div class="horizontal paginador">
+                                <button id="anteriorUS" type="button">Anterior</button>
+                                <div id="paginasUS" class="horizontal paginas">
+                                    <button>1</button>
+                                </div>
+                                <button id="siguienteUS" type="button">Siguiente</button>
+                            </div>
+                            <p id="totalPaginas">N resultados de N</p>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="space"></div>
+
+                <div id="cambios_area" class="area">
+                    <h3>Cambios</h3>
+                    <div class="tabla">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Tipo de cambio</th>
+                                    <th>Descipcion</th>
+                                    <th>Autor</th>
+                                    <th>Fecha</th>
+                                    <th>Hora</th>
+                                </tr>
+                            </thead>
+                            <tbody id="chnagesTable">
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="container3">
+                        <div class="pagesContainer">
+                            <div class="horizontal paginador">
+                                <button id="anteriorCH" type="button">Anterior</button>
+                                <div id="paginasCH" class="horizontal paginas">
+                                    <button>1</button>
+                                </div>
+                                <button id="siguienteCH" type="button">Siguiente</button>
+                            </div>
+                            <p id="totalPaginasCH">N resultados de N</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space"></div>
+            </div>
+        </div>
+
+
+    </main>
+
+    <div id="modalContainer" class="modal oculto">
+        <div class="modal-content">
+            <h1>Seguro que desea eliminar al usuario <span id="userDelete"></span>?</h1>
+            <div class="modal-buttons">
+                <button id="cancelButton">Cancelar</button>
+                <button id="deleteButton">Eliminar</button>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <h4 class="text" style="font-size: 15px;">SmartOrder &copy;2024</h4>
+    </footer>
+
+    <script src="./../js/Inicio.js"></script>
+    <script src="./../js/general.js"></script>
+</body>
+
+</html>
